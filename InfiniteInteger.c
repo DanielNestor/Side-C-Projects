@@ -3,7 +3,7 @@
 #include "Node.h"
 
 //function prototypes provided
-void add(element * h1, element * h2, element ** hAnswer);
+int add(element * h1, element * h2, element ** hAnswer);
 void equalize_length(char * s);
 void buffFirst(int diff);
 void buffSecond(int diff);
@@ -17,6 +17,8 @@ int *pointer;
 char input[30];
 int firstIsNegative = 0;
 int secondIsNegative = 0;
+int bothNegative = 0;
+
 
 
 
@@ -85,7 +87,7 @@ temp = temp - 48;
 
 
 //checking to see what the temp value is
- printf("the operator value is %d, and the symbol is %c:\n",temp,temp);
+ //printf("the operator value is %d, and the symbol is %c:\n",temp,temp);
 
 //break the loop once the nulls are reached
 if(temp <  -30){
@@ -134,20 +136,21 @@ if(operator == 0){
 }
 if(operator == 43){
     //for testing purposes both booleans will be set to false here
-    firstIsNegative = 0;
-    secondIsNegative = 0;
-    printf("Addition Operator Found\n");
+   // firstIsNegative = 0;
+  //  secondIsNegative = 0;
+   // printf("Addition Operator Found\n");
     
    add(head1,head2,dblptrAnswer);
 }
 
 
-//print out the answer before commiting to a file
-print(head_answer);
+
+
 
 
 //delete the normalized file
 //system("rm equalizedeq.txt");
+print(head_answer);
 printToFile(head_answer);
 
 
@@ -156,20 +159,32 @@ return 0;
 
 
 
-void add(element * h1, element * h2, element ** hAnswer){
+int add(element * h1, element * h2, element ** hAnswer){
+
+
+
+
+//case where both adds are positive
+
     int x = 0;
     int y = 0;
     int total = 0;
     int add_test_count = 0;
     int carry_over = 0;
-    //in the case that both element h1 and h2 are positive
+
+
+printf("The value of fin is %d and the value of sin is %d\n",firstIsNegative,secondIsNegative);
+//case where both are negative
+if(firstIsNegative == 1 && secondIsNegative == 1){
+//put a minus sign at the begining
+bothNegative = 1;
 while(1){
 //the case where both numbers are positive
-    if(firstIsNegative == 0 && secondIsNegative == 0){
+    if(firstIsNegative == 1 && secondIsNegative == 1){
        x = getHeadValue(h1);
-	printf("The Value of Head1 = %d\n",x);
+	//printf("The Value of Head1 = %d\n",x);
       y = getHeadValue(h2);
-        printf("The Value of Head2 = %d\n",y);
+      //  printf("The Value of Head2 = %d\n",y);
 
 
 	if(x == 666 || y == 666){
@@ -201,7 +216,59 @@ while(1){
     }
 add_test_count++;
   }  
-    
+
+
+
+
+
+
+
+
+}
+addValueToBegining(hAnswer,-3);
+return 0;
+    //in the case that both element h1 and h2 are positive
+while(1){
+//the case where both numbers are positive
+    if(firstIsNegative == 0 && secondIsNegative == 0){
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+
+
+	if(x == 666 || y == 666){
+		break;		
+	}        
+
+
+
+	//manipulate values here
+	total = x + y + carry_over;
+	if(total > 9){
+		carry_over = 1;
+                total = total - 10;
+		
+	}
+	else{
+		carry_over = 0;
+	}
+        
+        printf("The value of total is %d: \n", total);
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+
+	
+
+    }
+add_test_count++;
+  }  
+
+
+  return 0;  
     
     
 
@@ -238,7 +305,7 @@ void equalize_length(char * s){
     int operator_count = 1;
     int difference = 0;
     char hold;
-    
+    int count = 0;
     //read over the string and determine the lengths of both of the strings.
     while(1){
         
@@ -246,12 +313,20 @@ void equalize_length(char * s){
         hold = hold - 48;
         //break once the null terminal is reached
        printf("hold value = %d:\n", hold);
+
+//check here to see if the first value is a negative
+	if(count == 0 && hold == -3){
+		firstIsNegative = 1;
+		operator1_length--;
+		printf("First is Negative\n");
+	}
+
         if(hold < -30){
             break;
         }
         
         //check to see if the value of the tempval is an operator
-        if(hold < 0){
+        if(hold < 0 && hold != -3){
             operator_count++;
         }
         
@@ -263,7 +338,7 @@ void equalize_length(char * s){
             operator2_length++;
         }
         
-      
+     count++; 
      hold++;
         
         
@@ -316,9 +391,40 @@ void noBuff(){
 		char hold;
 	    FILE * fp = fopen(input,"r+");
     		FILE * fp2 = fopen("equalizedeq.txt","w+");
+	
+
+	//in the case that the first is negative move the readhead forward
+	if(firstIsNegative == 1){
+		hold = fgetc(fp);
+	}
+
  while(1){
-        
+   
+loop_top_return_noBuff:
+     
          hold = fgetc(fp);
+
+	//check to see if the character after found plus is negative sign
+	if(hold == 43){
+		//put the plus into the normalized file
+		fputc(hold,fp2);
+
+		hold = fgetc(fp);
+		if(hold == 45){
+			printf("second is negative\n");
+			secondIsNegative == 1;
+			fputc('0',fp2);
+			goto loop_top_return_noBuff;
+		}
+		else{
+			//in this case we have to put the character back into the file;
+			fputc(hold,fp2);
+			goto loop_top_return_noBuff;
+		}
+
+	}
+
+
 	  if(hold < 0){
                 break;
                 }
@@ -340,7 +446,10 @@ void buffFirst(int diff){
     FILE * fp2 = fopen("equalizedeq.txt","w+");
     char hold;
     
-   
+   //in the case that the first is negative move the readhead forward
+	if(firstIsNegative == 1){
+		hold = fgetc(fp);
+	}
     
     
     //buff the file
@@ -352,10 +461,35 @@ void buffFirst(int diff){
      
      //write the rest back
      while(1){
-        
+        loop_top_return_buffFirst:
          hold = fgetc(fp);
+
+//check to see if the character after found plus is negative sign
+	if(hold == 43){
+		printf("Operator Found in BuffFirst\n");
+
+		//put the plus into the normalized file
+		fputc(hold,fp2);
+
+		hold = fgetc(fp);
+		if(hold == 45){
+			printf("second is negative\n");
+			secondIsNegative = 1;
+			fputc('0',fp2);
+			goto loop_top_return_buffFirst;
+		}
+		else{
+			//in this case we have to put the character back into the file;
+			fputc(hold,fp2);
+			goto loop_top_return_buffFirst;
+		}
+
+	}
+
          
           
+
+
           
        //   printf("hold value in normalize = %d:\n", hold);
             if(hold < 0){
@@ -377,6 +511,11 @@ void buffSecond(int diff){
     FILE * fp = fopen(input,"r+");
     FILE * fp2 = fopen("equalizedeq.txt","w+");
     char hold;
+
+//in the case that the first is negative move the readhead forward
+	if(firstIsNegative == 1){
+		hold = fgetc(fp);
+	}
     
     //write up to the operator
      while(1){
@@ -404,14 +543,34 @@ void buffSecond(int diff){
     
     //then add to the end of the file
      while(1){
+
+loop_top_return_buffSecond:
         
          hold = fgetc(fp);
+	    
+
+          //check to see if the character after found plus is negative sign
+	if(hold == 43){
+		//put the plus into the normalized file
+		fputc(hold,fp2);
+
+		hold = fgetc(fp);
+		if(hold == 45){
+			printf("second is negative\n");
+			secondIsNegative = 1;
+		}
+		else{
+			//in this case we have to put the character back into the file;
+			fputc(hold,fp2);
+			goto loop_top_return_buffSecond;
+		}
+
+	}
+
          
           
-         
           
-          
-          printf("hold value in normalize = %d:\n", hold);
+       //   printf("hold value in normalize = %d:\n", hold);
             if(hold < 20){
                 break;
                 }
@@ -439,7 +598,7 @@ void printNormalizedFile(){
         normchar = fgetc(fp);
        // normchar = normchar - 48;
         
-        printf("The char in the Normalized File is: %d\n", normchar);
+      //  printf("The char in the Normalized File is: %d\n", normchar);
         
         //now check to see what's inside of the normchar
         if(normchar == -1){
@@ -448,7 +607,7 @@ void printNormalizedFile(){
        
       
     }
-    printf("Equalized loop passed\n");
+ //   printf("Equalized loop passed\n");
     fclose(fp);
     
 }
