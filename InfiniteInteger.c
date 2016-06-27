@@ -9,6 +9,10 @@ void buffFirst(int diff);
 void buffSecond(int diff);
 void printNormalizedFile();
 void noBuff();
+int CompareValues(element * a, element * b);
+void setIsLargerVariables(int x);
+int CompareValuesAlternative(element * a, element * b);
+
 
 //when going over the print function retrieve the values
 //with an integer pointer
@@ -18,6 +22,14 @@ char input[30];
 int firstIsNegative = 0;
 int secondIsNegative = 0;
 int bothNegative = 0;
+
+//variables to see which of the two is larger in terms of absolute value
+int firstAbsValIsGreater = 0;
+int secondAbsValIsGreater = 0;
+
+int firstVal = - 999;
+int secondVal = -999;
+
 
 
 
@@ -64,6 +76,7 @@ scanf("%s", input);
 equalize_length(input);
 printf("Length Equalized\n");
 printNormalizedFile();
+
 
 
 
@@ -127,6 +140,15 @@ temp_count++;
 
 }
 
+//now compare the values to see which has the greater absolute value
+if(firstIsNegative == 1 && secondIsNegative == 0){
+   setIsLargerVariables(CompareValuesAlternative(head1,head2)); 
+}
+else{
+    setIsLargerVariables(CompareValues(head1,head2));
+}
+
+
 
 
 
@@ -159,6 +181,11 @@ return 0;
 
 
 
+
+
+//add function starts here
+
+
 int add(element * h1, element * h2, element ** hAnswer){
 
 
@@ -168,13 +195,24 @@ int add(element * h1, element * h2, element ** hAnswer){
 
     int x = 0;
     int y = 0;
+    int xNext = 0;
+    int yNext = 0;
+    int xNext2 = 0;
+    int yNext2 = 0;
     int total = 0;
     int add_test_count = 0;
     int carry_over = 0;
+    int count = 1;
 
 
 printf("The value of fin is %d and the value of sin is %d\n",firstIsNegative,secondIsNegative);
+
+
+
 //case where both are negative
+
+
+
 if(firstIsNegative == 1 && secondIsNegative == 1){
 //put a minus sign at the begining
 bothNegative = 1;
@@ -186,6 +224,8 @@ while(1){
       y = getHeadValue(h2);
       //  printf("The Value of Head2 = %d\n",y);
 
+      
+      
 
 	if(x == 666 || y == 666){
 		break;		
@@ -221,12 +261,595 @@ add_test_count++;
 
 
 
-
+addValueToBegining(hAnswer,-3);
+return 0;
 
 
 }
-addValueToBegining(hAnswer,-3);
+
+
+//inside this section we will check for absolute value 
+//against the values obtained in the previous function
+//to do so there needs to be a check to see which is
+//the larger absolute value so proper calculations can be done
+
+
+//in this case we are now dealing with the case where the first
+//is negative and the second is positive
+    
+    
+    //case where the first is negative and the second is positive
+    
+    
+    
+if(firstIsNegative == 1 && secondIsNegative == 0){
+printf("First is Negative, Second is not Negative\n");
+ //in the case that h1 is positive and h2 is negative
+while(1){
+//the case where both numbers are positive
+    if(firstIsNegative == 1 && secondIsNegative == 0){
+        
+  // printf("The First firstAbsValIsGreater = %d, The second AbsValIsGreater = %d\n",firstAbsValIsGreater,secondAbsValIsGreater);
+   
+   //the case where the value of the second absolute value is greater   
+       if(count == 1){
+        count++;
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+      printf("Inside the secondAbsValIsGreater\n");
+
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+    }
+    else{
+        
+        //move head forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+    
+        if(xNext2 != 666){
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+        }
+    }
+
+
+	    printf(" x = %d,  y = %d  xNext = %d yNext = %d xNext2 = %d yNext2 = %d xnext2 = %d\n", x,y,xNext,yNext,xNext2,yNext2,xNext2);
+
+
+
+	//manipulate values here
+	total = y - x;
+         printf("The value of total is %d: \n", total);
+	
+	if(total < 0 && xNext2 == 666){
+            printf("at end do not subtract\n");
+		yNext--;
+                total = total * -1;
+                //then add to linked list
+                //add values to the third linked list to store the thing
+            addValueToBegining(hAnswer,total);
+             addValueToBegining(hAnswer,-3);
+                return 0;
+		
+	}
+	if(total < 0 && xNext != 666){
+		yNext--;
+                total = total + 10;
+		
+	}
+        printf("The value of total is %d: \n", total);
+       
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        if(x == 666 || y == 666){
+            printf("Break Hit\n");
+		break;		
+	}    
+	
+	//swap around the xnext with x and y next with y
+	x = xNext;
+        y = yNext;
+        yNext = yNext2;
+        xNext = xNext2;
+        
+        printf("\n\n\n");
+
+	count++;
+
+    }
+    
+    //case where the first absolute value is 
+
+    
+    
+    
+  //the case where the second absvalis greater
+  if(firstAbsValIsGreater == 1){       
+       if(count == 1){
+        count++;
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+      printf("Inside the firstAbsValIsGreater Look here\n");
+
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+    }
+    else{
+        
+        //move head forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+    
+        if(xNext2 != 666){
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+        }
+    }
+
+
+	    printf(" x = %d,  y = %d  xNext = %d yNext = %d xNext2 = %d yNext2 = %d xnext2 = %d\n", x,y,xNext,yNext,xNext2,yNext2,xNext2);
+
+
+
+	//manipulate values here
+	total = x - y;
+         printf("The value of total is %d: \n", total);
+	
+	if(total < 0 && xNext2 == 666){
+            printf("at end do not subtract\n");
+		xNext--;
+                total = total * -1;
+                //then add to linked list
+                //add values to the third linked list to store the thing
+            addValueToBegining(hAnswer,total);
+             addValueToBegining(hAnswer,-3);
+                return 0;
+		
+	}
+	if(total < 0 && xNext != 666){
+		xNext--;
+                total = total + 10;
+		
+	}
+        printf("The value of total is %d: \n", total);
+       
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        if(x == 666 || y == 666){
+            printf("Break Hit\n");
+		break;		
+	}    
+	
+	//swap around the xnext with x and y next with y
+	x = xNext;
+        y = yNext;
+        yNext = yNext2;
+        xNext = xNext2;
+        
+        printf("\n\n\n");
+
+	count++;
+
+    }
+    
+    
+  //in the case where the second absval is greater  
+ if(secondAbsValIsGreater == 1){       
+       if(count == 1){
+        count++;
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+      printf("Inside the firstAbsValIsGreater Look here\n");
+
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+    }
+    else{
+        
+        //move head forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+    
+        if(xNext2 != 666){
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+        }
+    }
+
+
+	    printf(" x = %d,  y = %d  xNext = %d yNext = %d xNext2 = %d yNext2 = %d xnext2 = %d\n", x,y,xNext,yNext,xNext2,yNext2,xNext2);
+
+
+
+	//manipulate values here
+	total = x - y;
+         printf("The value of total is %d: \n", total);
+	
+	if(total < 0 && xNext2 == 666){
+            printf("at end do not subtract\n");
+		xNext--;
+                total = total * -1;
+                //then add to linked list
+                //add values to the third linked list to store the thing
+            addValueToBegining(hAnswer,total);
+             addValueToBegining(hAnswer,-3);
+                return 0;
+		
+	}
+	if(total < 0 && xNext != 666){
+		xNext--;
+                total = total + 10;
+		
+	}
+        printf("The value of total is %d: \n", total);
+       
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        if(x == 666 || y == 666){
+            printf("Break Hit\n");
+		break;		
+	}    
+	
+	//swap around the xnext with x and y next with y
+	x = xNext;
+        y = yNext;
+        yNext = yNext2;
+        xNext = xNext2;
+        
+        printf("\n\n\n");
+
+	count++;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+  
+    
+     
+      
+
+  
+
+    
+    
+  
+  
+}
+ //addValueToBegining(hAnswer,-3);
 return 0;
+}   
+    
+    
+    
+
+    
+    
+    //separation point
+    
+    
+
+
+
+
+//separation point
+
+
+
+
+
+//case where the first is positive and second is  negative
+if(firstIsNegative == 0 && secondIsNegative == 1){
+    //try and remove the initial zero
+    
+    
+    
+    
+printf("First is not Negative, Second is Negative\n");
+ //in the case that h1 is positive and h2 is negative
+while(1){
+//the case where both numbers are positive
+    if(firstIsNegative == 0 && secondIsNegative == 1){
+        
+  // printf("The First firstAbsValIsGreater = %d, The second AbsValIsGreater = %d\n",firstAbsValIsGreater,secondAbsValIsGreater);
+   
+   //the case where the value of the second absolute value is greater
+ if(secondAbsValIsGreater == 1){       
+       if(count == 1){
+        count++;
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+      printf("Inside the secondAbsValIsGreater\n");
+
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+    }
+    else{
+        
+        //move head forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+    
+        if(xNext2 != 666){
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+        }
+    }
+
+
+	    printf(" x = %d,  y = %d  xNext = %d yNext = %d xNext2 = %d yNext2 = %d xnext2 = %d\n", x,y,xNext,yNext,xNext2,yNext2,xNext2);
+
+
+
+	//manipulate values here
+	total = y - x;
+         printf("The value of total is %d: \n", total);
+	
+	if(total < 0 && xNext2 == 666){
+            printf("at end do not subtract\n");
+		yNext--;
+                total = total * -1;
+                //then add to linked list
+                //add values to the third linked list to store the thing
+            addValueToBegining(hAnswer,total);
+             addValueToBegining(hAnswer,-3);
+                return 0;
+		
+	}
+	if(total < 0 && xNext != 666){
+		yNext--;
+                total = total + 10;
+		
+	}
+        printf("The value of total is %d: \n", total);
+       
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        if(x == 666 || y == 666){
+            printf("Break Hit\n");
+		break;		
+	}    
+	
+	//swap around the xnext with x and y next with y
+	x = xNext;
+        y = yNext;
+        yNext = yNext2;
+        xNext = xNext2;
+        
+        printf("\n\n\n");
+
+	count++;
+
+    }
+    
+    
+    
+    
+    
+  //the case where the first absvalis greater
+  if(firstAbsValIsGreater == 1){       
+       if(count == 1){
+        count++;
+       x = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      y = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+      printf("Inside the firstAbsValIsGreater Look here\n");
+
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+        //move heads forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+      
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+      
+    }
+    else{
+        
+        //move head forward
+        h1 = moveHeadForward(h1);
+	h2 = moveHeadForward(h2);
+    
+        if(xNext2 != 666){
+      xNext2 = getHeadValue(h1);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext2 = getHeadValue(h2);
+      //  printf("The Value of Head2 = %d\n",y);
+        }
+    }
+
+
+	    printf(" x = %d,  y = %d  xNext = %d yNext = %d xNext2 = %d yNext2 = %d xnext2 = %d\n", x,y,xNext,yNext,xNext2,yNext2,xNext2);
+
+
+
+	//manipulate values here
+	total = x - y;
+         printf("The value of total is %d: \n", total);
+	
+	if(total < 0 && xNext2 == 666){
+            printf("at end do not subtract\n");
+		xNext--;
+                total = total * -1;
+                //then add to linked list
+                //add values to the third linked list to store the thing
+            addValueToBegining(hAnswer,total);
+             addValueToBegining(hAnswer,-3);
+                return 0;
+		
+	}
+	if(total < 0 && xNext != 666){
+		xNext--;
+                total = total + 10;
+		
+	}
+        printf("The value of total is %d: \n", total);
+       
+	//add values to the third linked list to store the thing
+	addValueToBegining(hAnswer,total);
+        
+        if(x == 666 || y == 666){
+            printf("Break Hit\n");
+		break;		
+	}    
+	
+	//swap around the xnext with x and y next with y
+	x = xNext;
+        y = yNext;
+        yNext = yNext2;
+        xNext = xNext2;
+        
+        printf("\n\n\n");
+
+	count++;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+add_test_count++;
+  }  
+  
+    
+     
+      
+
+  
+
+    
+    
+  
+  
+}
+ addValueToBegining(hAnswer,-3);
+return 0;
+}
+
+
+
+
+
+
+
+
     //in the case that both element h1 and h2 are positive
 while(1){
 //the case where both numbers are positive
@@ -267,18 +890,7 @@ while(1){
 add_test_count++;
   }  
 
-
-  return 0;  
-    
-    
-
-    
-    
- //a dummy statement so the compiler does not complain
- //whenever I jump to this pointer
- x++;
- 
-    
+  
 }
 
 
@@ -320,6 +932,10 @@ void equalize_length(char * s){
 		operator1_length--;
 		printf("First is Negative\n");
 	}
+	else{
+            firstVal = hold;
+            
+        }
 
         if(hold < -30){
             break;
@@ -412,7 +1028,7 @@ loop_top_return_noBuff:
 		hold = fgetc(fp);
 		if(hold == 45){
 			printf("second is negative\n");
-			secondIsNegative == 1;
+			secondIsNegative = 1;
 			fputc('0',fp2);
 			goto loop_top_return_noBuff;
 		}
@@ -553,7 +1169,7 @@ loop_top_return_buffSecond:
 	if(hold == 43){
 		//put the plus into the normalized file
 		fputc(hold,fp2);
-
+                printf("Operator Found in Buff Second\n");
 		hold = fgetc(fp);
 		if(hold == 45){
 			printf("second is negative\n");
@@ -581,6 +1197,224 @@ loop_top_return_buffSecond:
 
     
 }
+
+
+
+
+void setIsLargerVariables(int x){
+    printf("The value of x in set is larger is %d\n",x);
+    
+    if(x == 1){
+        
+        firstAbsValIsGreater = 1;
+    }
+    if(x == 0){
+        //do nothing
+        
+    }
+    if(x == 2){
+        
+        secondAbsValIsGreater = 1;
+    }
+    
+    
+
+}
+
+
+
+
+
+
+//an alternative check values function for the case where the 
+//first is negative and the second is positive
+int CompareValuesAlternative(element * a, element * b){
+    printf("Inside the alternative compare values function\n");
+    
+    printf("Head A:\n");
+    print(a);
+    printf("Head B:\n");
+    print(b);
+    
+    
+}
+
+
+
+//this function checks the absolute value of 2 linked list and returns whether or not one is 
+//greater than the other this function  will return 0 if the values are equal 1 if the first is bigger and
+//2 if the second is bigger
+int CompareValues(element * a, element * b){
+    
+    
+  
+    
+    
+    
+    
+    unsigned short out_val;
+    int y = -1;
+    int x = -1;
+    int counter = 0;
+    
+    //loop over the normalized values for answers
+    int count = 0;
+    
+    //create 2 temporary lists to be passed over in reverse order
+    //declare a head for the first value
+    element * temp_head1 = NULL;
+    temp_head1 = malloc(sizeof(element));
+
+        //declare head for the second value
+        element * temp_head2 = NULL;
+        temp_head2 = malloc(sizeof(element));
+        
+        
+        
+        //create the double pointers for when the add to begining function is called
+        element ** temp_dbl_ptr1;
+        element ** temp_dbl_ptr2;
+        
+        //set double pointers as pointers to head pointer
+        temp_dbl_ptr1 = &temp_head1;
+        temp_dbl_ptr2 = &temp_head2;
+    
+        
+          printf("Inside the Compare Values Function\n");
+    
+       //print check of the tempheads one and 2
+   // printf("Printing temphead1\n");
+    print(temp_head1);
+   //     printf("Printing temphead2\n");
+    print(temp_head2);
+        
+    int xNext = 0;
+    int yNext = 0;   
+    
+    int loop_skip = 0;
+    
+    while(1){
+
+       xNext = getHeadValue(a);
+	//printf("The Value of Head1 = %d\n",x);
+      yNext = getHeadValue(b);
+      //  printf("The Value of Head2 = %d\n",y);
+    counter++;
+      
+      printf("The value of x is %d: The Value of y is %d:\n",x,y);
+      printf("The value of xNext is %d: The Value of yNext is %d:\n",xNext,yNext);
+       //print check of the tempheads one and 2
+    printf("Printing temphead1\n");
+    print(temp_head1);
+    printf("Printing temphead2\n");
+    print(temp_head2);
+    
+      
+      if(xNext == 666 && yNext == 666 && x == 0 && y == 0){
+          break;
+    }
+      
+      
+
+	if(xNext == 666 || yNext == 666){
+		break;		
+                printf("\n\n\n");
+                
+	}        
+  //add these new values to the temp lists
+  if(loop_skip != 0){
+      addValueToBegining(temp_dbl_ptr1,x);
+      addValueToBegining(temp_dbl_ptr2,y);
+      
+  }
+  loop_skip++;
+     // addValue(temp_head1,x);
+     // addValue(temp_head2,y);
+      
+      
+      //replace the x and y with the next
+      x = xNext;
+      y = yNext;
+      
+      
+      
+      //moving the heads forward
+      a = moveHeadForward(a);
+      b = moveHeadForward(b);
+   
+
+
+  }  
+  
+  //add the 666 to the end so that we have a terminator character for the string justincase they are the same
+   //  addValue(temp_head1,666);
+  //    addValue(temp_head2,666);
+  
+    
+    //print check of the tempheads one and 2
+    printf("Printing temphead1\n");
+    print(temp_head1);
+    printf("Printing temphead2\n");
+    print(temp_head2);
+    
+    //after this go and loop over the new temporary lists
+    //these lists will be in correct order
+    
+    printf("Inside the compare values before second loop\n\n\n");
+    
+    while(1){
+        
+           x = getHeadValue(temp_head1);
+	printf("The Value of Head1 = %d\n",x);
+         y = getHeadValue(temp_head2);
+       printf("The Value of Head2 = %d\n",y);
+         
+         
+             //once the values are in the temporary list, run over the temp list again
+    //checking for suspect values that will indicate which is larger and which is smaller.
+    if(x > y){
+        printf("returned 1\n");
+        return 1;
+    }
+    
+    if(y > x){
+        printf("returned 2\n");
+        return 2;
+        
+    }
+
+        
+        
+         printf("The value of x is %d: The Value of y is %d:\n",x,y);
+         
+         //move the heads forward down the linked list
+         temp_head1 = moveHeadForward(temp_head1);
+         temp_head2 = moveHeadForward(temp_head2);
+         
+  if(x == 666 || y == 666 ){
+		break;		
+	}   
+        count--;
+        
+    }
+    
+    
+
+  
+    
+    
+    return 0;
+    
+}
+
+
+
+
+
+
+
+
+
 
 
 
